@@ -22,7 +22,7 @@ abstract class TestCase extends BaseTestCase
     protected function getEnvironmentSetUp($app): void
     {
         $migrationFiles = [
-            __DIR__ . '/../src/Database/Migrations/2022_12_05_232100_create_countries_table.php',
+            __DIR__ . '/../src/Database/Migrations/2023_02_04_104010_create_failed_to_dispatch_jobs.php',
         ];
 
         foreach ($migrationFiles as $migrationFile) {

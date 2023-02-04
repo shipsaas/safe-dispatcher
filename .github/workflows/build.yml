@@ -26,17 +26,26 @@ jobs:
                 with:
                     php-version: ${{ matrix.version }}
                     coverage: pcov
+                    extensions: phpredis
+
+            -   name: Start Redis
+                uses: supercharge/redis-github-action@1.4.0
+                with:
+                    redis-version: 6
 
             -   name: Setup
                 if: success()
                 run: |
                     php -v
+                    sudo service mysql start
                     composer install --no-interaction
                     echo "$TESTING_ENV" > .env.testing
+
             -   name: PHPUnit tests with coverage
                 if: success() && github.event.pull_request.draft == false
                 run: |
                     composer test-coverage
+
             -   name: upload coverage to codecov.io
                 if: success() && matrix.version == '8.1'
                 uses: codecov/codecov-action@v1

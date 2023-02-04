@@ -19,7 +19,7 @@ class SafeDispatcher extends Dispatcher
                 ->make(FailDispatcherService::class)
                 ->storeFailure($queue, $throwable, $command);
 
-            return null;
+            return;
         }
     }
 
@@ -27,7 +27,7 @@ class SafeDispatcher extends Dispatcher
     {
         try {
             return parent::dispatchNow($command, $handler);
-        }  catch (Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->container
                 ->make(FailDispatcherService::class)
                 ->storeFailure(
@@ -36,7 +36,7 @@ class SafeDispatcher extends Dispatcher
                     $command
                 );
 
-            return null;
+            return;
         }
     }
 
