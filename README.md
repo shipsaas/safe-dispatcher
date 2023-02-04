@@ -14,7 +14,10 @@ Then it will cost you a lot of time to check the log, sentry issues, create retr
 
 Worries no more, SafeDispatcher got your back. Check out how it works below.
 
-Documentation: (coming soon)
+Documentation:
+- This README
+- [APIs](./docs/APIs.md)
+- [GUI](./docs/GUI.md)
 
 ## How SafeDispatcher works?
 
@@ -25,6 +28,8 @@ SafeDispatcher will:
 - Stores the failed to dispatch msgs and help you to retry them.
 - You can even change the connection driver or the name on retry.
   - Would really come in handy when you have a `SQSException` (size > 256kb), then you can retry on redis/database driver.
+- Ensure that your processing/flow is still working properly (no 500 server error from HTTP or exception from queue worker).
+  - Super useful for critical apps.
 
 ## Requirements
 - Laravel 9+
