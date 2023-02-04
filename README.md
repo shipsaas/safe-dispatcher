@@ -1,13 +1,14 @@
-# Laravel Safe Dispatcher for Queue
+# Laravel Safe Dispatcher for Queues
 
 [![Build & Test](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml/badge.svg)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/shipsaas/safe-dispatcher/branch/main/graph/badge.svg?token=FLVU412CUI)](https://codecov.io/gh/shipsaas/safe-dispatcher)
 
-For Laravel, it has the Queue feature, all cool and easy to use, right?
+For Laravel, it has the Queues feature, all cool and easy to use, right?
 
-But what if it fails to dispatch a job? Then you have no idea for:
+But what if it **fails to dispatch a job**? Then you have no idea for:
 
 - What was the data inside the msg?
-- Resend the msg
+- Resend the Queue msg
 
 Then it will cost you a lot of time to check the log, sentry issues, create retry command,... Awful, IKR?
 
@@ -18,6 +19,12 @@ Documentation: (coming soon)
 ## How SafeDispatcher works?
 
 ![How does Laravel SafeDispatcher works?](./docs/SafeDispatcher.png)
+
+SafeDispatcher will:
+
+- Stores the failed to dispatch msgs and help you to retry them.
+- You can even change the connection driver or the name on retry.
+  - Would really come in handy when you have a `SQSException` (size > 256kb), then you can retry on redis/database driver.
 
 ## Requirements
 - Laravel 9+
@@ -69,6 +76,7 @@ SendEmailToRegisteredUser::safeDispatch($user);
   - Alternatively, you can do normal `::safeDispatch` and after finish your job, dispatch another,...
 - SafeDispatcher considers the `sync` Queue as a Queue Msg.
   - Therefore, if the handling fails, Queue Msg will be stored too.
+- SafeDispatcher also has some implemented APIs too, check it out: [APIs](./docs/APIs.md)
 
 ## Contribute to the project
 - All changes must follow PSR-1 / PSR-12 coding conventions.
