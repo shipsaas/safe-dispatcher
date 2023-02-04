@@ -11,7 +11,7 @@ Worries no more, SafeDispatcher got your back. Check out how it works below.
 
 ## How SafeDispatcher works?
 
-Chart coming soon
+![How does Laravel SafeDispatcher works?](./docs/SafeDispatcher.png)
 
 ## Requirements
 - Laravel 9+
