@@ -89,6 +89,20 @@ class SafeDispatcherTest extends TestCase
             'errors->msg' => 'Job Failed to process',
         ]);
     }
+
+    public function testBatchIsNotSupported()
+    {
+        $this->expectException(RuntimeException::class);
+
+        app(SafeDispatcher::class)->batch([]);
+    }
+
+    public function testChainIsNotSupported()
+    {
+        $this->expectException(RuntimeException::class);
+
+        app(SafeDispatcher::class)->chain([]);
+    }
 }
 
 class QueueJob implements ShouldQueue
