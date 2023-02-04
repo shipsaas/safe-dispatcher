@@ -1,0 +1,62 @@
+{
+  "name": "shipsaas/safe-dispatcher",
+  "type": "library",
+  "version": "1.0.0",
+  "description": "Ensure your Queue msg is tracked and retryable when failed to dispatch.",
+  "keywords": [
+    "laravel library",
+    "laravel safe dispatcher",
+    "laravel safe dispatch erensure your job is totally tracked"
+  ],
+  "authors": [
+    {
+      "name": "Phat Tran (Seth Phat)",
+      "email": "phattranminh96@gmail.com",
+      "homepage": "https://github.com/sethsandaru",
+      "role": "Sr.SWE"
+    }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "^8.1|^8.2",
+    "laravel/framework": "^9|dev-master"
+  },
+  "require-dev": {
+    "fakerphp/faker": "^v1.20.0",
+    "mockery/mockery": "^1.5.1",
+    "phpunit/phpunit": "^9.5.25",
+    "orchestra/testbench": "^7",
+    "phpunit/php-code-coverage": "^9.2.17",
+    "friendsofphp/php-cs-fixer": "^3.10"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "SaasSafeDispatcher\\SafeDispatcherServiceProvider"
+      ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "SaasSafeDispatcher\\": "src/"
+    },
+    "files": [
+      "src/Functions/safe-dispatcher-functions.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SaasSafeDispatcher\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test-coverage": [
+      "@php vendor/bin/phpunit --coverage-clover coverage.xml"
+    ],
+    "test": [
+      "@php vendor/bin/phpunit"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
