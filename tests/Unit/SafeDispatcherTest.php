@@ -23,8 +23,12 @@ class SafeDispatcherTest extends TestCase
 
         QueueJob::safeDispatch('SafeDispatch');
 
-        // if there is no exception => ok
-        $this->assertTrue(true);
+        $this->assertSame(1, app(QueueManager::class)->connection()->size());
+
+        // works fine
+        $this->artisan('queue:work redis --max-jobs=1')->assertOk();
+
+        $this->assertSame(0, app(QueueManager::class)->connection()->size());
     }
 
     public function testDispatchQueueFailed()
