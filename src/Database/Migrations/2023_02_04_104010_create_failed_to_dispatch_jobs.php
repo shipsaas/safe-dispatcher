@@ -8,8 +8,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('failed_to_dispatch_jobs', function (Blueprint $table) {
-            $table->id();
-            $table->uuid()->unique();
+            $table->uuid('id')->unique();
 
             $table->string('job_class')->index();
             $table->string('connection')->nullable()->index();

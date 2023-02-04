@@ -8,12 +8,12 @@ class SafePendingDispatch extends PendingDispatch
 {
     public function __destruct()
     {
-        if (! $this->shouldDispatch()) {
+        if (!$this->shouldDispatch()) {
             return;
         } elseif ($this->afterResponse) {
-            app(Dispatcher::class)->dispatchAfterResponse($this->job);
+            app(SafeDispatcher::class)->dispatchAfterResponse($this->job);
         } else {
-            app(Dispatcher::class)->dispatch($this->job);
+            app(SafeDispatcher::class)->dispatch($this->job);
         }
     }
 }
