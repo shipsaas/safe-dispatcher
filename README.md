@@ -27,8 +27,8 @@ SafeDispatcher will:
 
 - Stores the failed to dispatch msgs and help you to retry them.
 - You can even change the connection driver or the name on retry.
-  - Would really come in handy when you have a `SQSException` (size > 256kb), then you can retry on redis/database driver.
-- Ensure that your processing/flow is still working properly (no 500 server error from HTTP or exception from queue worker).
+  - Would really come in handy when you have a `SQSException` (size > 256kb), then you can resend using redis/database driver.
+- Ensure that your processing/flow is still working properly (no 500 server error from HTTP or exceptions from queue worker).
   - Super useful for critical apps.
 
 ## Requirements
@@ -83,10 +83,16 @@ SendEmailToRegisteredUser::safeDispatch($user);
   - Therefore, if the handling fails, Queue Msg will be stored too.
 - SafeDispatcher also has some implemented APIs too, check it out: [APIs](./docs/APIs.md)
 
-## Unit Testing
+## Tests
 SafeDispatcher is not only have normal Unit Testing but also Integration Test (interacting with MySQL for DB and Redis for Queue).
 
-We're planning to add other queue drivers too (eg database or SQS).
+We're planning to add other queue drivers too (database or SQS).
+
+To run the test, hit this:
+
+```bash
+composer test
+```
 
 ## Contribute to the project
 - All changes must follow PSR-1 / PSR-12 coding conventions.
