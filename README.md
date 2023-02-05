@@ -83,6 +83,11 @@ SendEmailToRegisteredUser::safeDispatch($user);
   - Therefore, if the handling fails, Queue Msg will be stored too.
 - SafeDispatcher also has some implemented APIs too, check it out: [APIs](./docs/APIs.md)
 
+## Unit Testing
+SafeDispatcher is not only have normal Unit Testing but also Integration Test (interacting with MySQL for DB and Redis for Queue).
+
+We're planning to add other queue drivers too (eg database or SQS).
+
 ## Contribute to the project
 - All changes must follow PSR-1 / PSR-12 coding conventions.
 - Unit testing is a must, cover things as much as you can.
