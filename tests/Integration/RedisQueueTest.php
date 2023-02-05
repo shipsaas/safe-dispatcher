@@ -18,6 +18,9 @@ use SaasSafeDispatcher\Traits\SafeDispatchable;
 
 class RedisQueueTest extends TestCase
 {
+    /**
+     * Dispatch normal queue msg
+     */
     public function testDispatchQueueAndWorkOk()
     {
         config([
@@ -34,6 +37,9 @@ class RedisQueueTest extends TestCase
         $this->assertSame(0, app(QueueManager::class)->connection()->size());
     }
 
+    /**
+     * Dispatch closure job queue msg
+     */
     public function testDispatchClosureJobOk()
     {
         config([
@@ -52,6 +58,9 @@ class RedisQueueTest extends TestCase
         $this->assertSame(0, app(QueueManager::class)->connection()->size());
     }
 
+    /**
+     * Redispatch normal queue msg to another driver
+     */
     public function testRedispatchFailedToDispatchJobOk()
     {
         config([
@@ -114,6 +123,9 @@ class RedisQueueTest extends TestCase
         $this->assertSame(0, app(QueueManager::class)->connection('redis')->size());
     }
 
+    /**
+     * Redispatch closure queue msg to another driver & queue
+     */
     public function testRedispatchFailedToDispatchClosureJobOk()
     {
         config([
