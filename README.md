@@ -8,7 +8,8 @@ For Laravel, it has the Queues feature, all cool and easy to use, right?
 But what if it **fails to dispatch a job**? Then you have no idea for:
 
 - What was the data inside the msg?
-- Resend the Queue msg
+- What was the error? Traces?
+- How to resend the Queue msg with minimal effort?
 
 Then it will cost you a lot of time to check the log, sentry issues, create retry command,... Awful, IKR?
 
@@ -77,7 +78,9 @@ SendEmailToRegisteredUser::safeDispatch($user);
 
 ## Notes
 
-- SafeDispatcher doesn't work with batching & chaining.
+- SafeDispatcher hasn't covered the `Queue` facade.
+  - Alternatively, you can follow this doc: [Cover Queue Facade](./docs/QueueFacade.md)
+- SafeDispatcher hasn't supported with batching & chaining.
   - Alternatively, you can do normal `::safeDispatch` and after finish your job, dispatch another,...
 - SafeDispatcher considers the `sync` Queue as a Queue Msg.
   - Therefore, if the handling fails, Queue Msg will be stored too.
