@@ -34,15 +34,15 @@ class FailDispatcherService
      */
     public function redispatch(
         FailedToDispatchJob $failedToDispatchJob,
-        RedispatchOption $option
+        ?RedispatchOption $option = null
     ): void {
-        $job = unserialize($failedToDispatchJob->job_detail);
+        $job = $failedToDispatchJob->getJobObject();
 
-        if ($option->connection && method_exists($job, 'onConnection')) {
+        if ($option?->connection && method_exists($job, 'onConnection')) {
             $job->onConnection($option->connection);
         }
 
-        if ($option->queue && method_exists($job, 'onQueue')) {
+        if ($option?->queue && method_exists($job, 'onQueue')) {
             $job->onQueue($option->queue);
         }
 

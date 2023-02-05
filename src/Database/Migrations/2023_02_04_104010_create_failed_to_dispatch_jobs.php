@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->json('errors');
 
             $table->timestamps();
-            $table->timestamp('redispatch_at')->nullable();
+            $table->timestamp('redispatched_at')->nullable();
 
             $table->index('created_at');
             $table->index('updated_at');

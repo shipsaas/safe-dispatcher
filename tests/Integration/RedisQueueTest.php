@@ -1,6 +1,6 @@
 <?php
 
-namespace SaasSafeDispatcher\Tests\Unit;
+namespace SaasSafeDispatcher\Tests\Integration;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,26 +9,31 @@ use Illuminate\Queue\NullQueue;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
-use SaasSafeDispatcher\Bus\SafeDispatcher;
 use SaasSafeDispatcher\Models\FailedToDispatchJob;
+use SaasSafeDispatcher\Services\FailDispatcherService;
+use SaasSafeDispatcher\Services\RedispatchOption;
 use SaasSafeDispatcher\Tests\TestCase;
 use SaasSafeDispatcher\Traits\SafeDispatchable;
 
-class SafeDispatcherTest extends TestCase
+class RedisQueueTest extends TestCase
 {
-    public function testDispatchQueueOk()
+    public function testDispatchQueueAndWorkOk()
     {
         config([
-            'queue.default' => 'null',
+            'queue.default' => 'redis',
         ]);
 
         QueueJob::safeDispatch('SafeDispatch');
 
-        // no exception => all good
-        $this->assertTrue(true);
+        $this->assertSame(1, app(QueueManager::class)->connection()->size());
+
+        // works fine
+        $this->artisan('queue:work redis --max-jobs=1')->assertOk();
+
+        $this->assertSame(0, app(QueueManager::class)->connection()->size());
     }
 
-    public function testDispatchQueueFailed()
+    public function testRedispatchFailedToDispatchJobOk()
     {
         config([
             'queue.default' => 'null',
@@ -53,56 +58,41 @@ class SafeDispatcherTest extends TestCase
                 }
             });
 
+        // 1. Failed to dispatch
         QueueJob::safeDispatch('SafeDispatch');
 
         $this->assertDatabaseHas((new FailedToDispatchJob())->getTable(), [
             'job_class' => QueueJob::class,
             'errors->msg' => 'Cannot dispatch job',
         ]);
-    }
 
-    public function testDispatchNowOk()
-    {
-        $job = new QueueJob('Seth Phat');
-
-        Log::expects('info')
-            ->once()
-            ->with('Hello Seth Phat');
-
-        app(SafeDispatcher::class)->dispatchSync($job);
-    }
-
-    public function testDispatchNowFailed()
-    {
-        $job = new QueueJob('Seth Phat');
-
-        Log::expects('info')
-            ->once()
-            ->with('Hello Seth Phat')
-            ->andThrow(new RuntimeException('Job Failed to process'));
-
-        // for sync & now, since it will be processed in the same/synchronous process
-        // so if the handle failed => consider it a failed to dispatch
-        app(SafeDispatcher::class)->dispatchSync($job);
-
-        $this->assertDatabaseHas((new FailedToDispatchJob())->getTable(), [
+        // 2. Redispatch
+        $storedFailedToDispatchJob = FailedToDispatchJob::where([
             'job_class' => QueueJob::class,
-            'errors->msg' => 'Job Failed to process',
-        ]);
-    }
+        ])->first();
 
-    public function testBatchIsNotSupported()
-    {
-        $this->expectException(RuntimeException::class);
+        $jobObject = $storedFailedToDispatchJob?->getJobObject();
 
-        app(SafeDispatcher::class)->batch([]);
-    }
+        $this->assertNotNull($storedFailedToDispatchJob);
+        $this->assertNotNull($jobObject);
+        $this->assertInstanceOf(ShouldQueue::class, $jobObject);
 
-    public function testChainIsNotSupported()
-    {
-        $this->expectException(RuntimeException::class);
+        $redispatchOption = new RedispatchOption();
+        $redispatchOption->connection = 'redis';
+        app(FailDispatcherService::class)->redispatch(
+            $storedFailedToDispatchJob,
+            $redispatchOption
+        );
 
-        app(SafeDispatcher::class)->chain([]);
+        $storedFailedToDispatchJob->refresh();
+        $this->assertNotNull($storedFailedToDispatchJob->redispatched_at);
+
+        // 3. Final assertion & queue work
+        $this->assertSame(1, app(QueueManager::class)->connection('redis')->size());
+
+        $this->artisan('queue:work redis --max-jobs=1')->assertOk();
+
+        $this->assertSame(0, app(QueueManager::class)->connection('redis')->size());
     }
 }
 

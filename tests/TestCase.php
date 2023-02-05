@@ -12,6 +12,12 @@ abstract class TestCase extends BaseTestCase
     use WithFaker;
     use DatabaseTransactions;
 
+    protected function tearDown(): void
+    {
+        $this->artisan('queue:clear redis');
+        parent::tearDown();
+    }
+
     protected function getPackageProviders($app): array
     {
         return [

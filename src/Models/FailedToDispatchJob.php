@@ -23,4 +23,9 @@ class FailedToDispatchJob extends Model
     protected $casts = [
         'errors' => 'array',
     ];
+
+    public function getJobObject(): mixed
+    {
+        return unserialize($this->job_detail);
+    }
 }
