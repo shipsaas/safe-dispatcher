@@ -39,7 +39,7 @@ SafeDispatcher will:
 ## Installation
 
 ```bash
-composer require shipsaas/safe-dispatch
+composer require shipsaas/safe-dispatcher
 ```
 
 ## Usage
@@ -74,6 +74,16 @@ class SendEmailToRegisteredUser implements ShouldQueue
 }
 
 SendEmailToRegisteredUser::safeDispatch($user);
+```
+
+### Quick Helper Functions
+
+```php
+safeDispatch(new SendEmailToRegisteredUser($user));
+
+safeDispatch(() => echo('Hello'));
+
+safeDispatchSync(new SendEmailToRegisteredUser($user));
 ```
 
 ## Notes
