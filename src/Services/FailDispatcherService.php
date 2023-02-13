@@ -20,8 +20,8 @@ class FailDispatcherService
         FailedToDispatchJob::create([
             'job_class' => get_class($command),
             'job_detail' => serialize($command),
-            'queue' => $command->queue ?? null,
-            'connection' => $queueDriver->getConnectionName(),
+            'queue_name' => $command->queue ?? null,
+            'queue_connection' => $queueDriver->getConnectionName(),
             'errors' => [
                 'msg' => $throwable->getMessage(),
                 'traces' => $throwable->getTrace(),

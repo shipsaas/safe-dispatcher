@@ -17,8 +17,8 @@ class FailedToDispatchJob extends Model
     protected $fillable = [
         'job_class',
         'job_detail',
-        'connection',
-        'queue',
+        'queue_connection',
+        'queue_name',
         'errors',
         'redispatched_at',
     ];
