@@ -11,8 +11,8 @@ return new class extends Migration {
             $table->uuid('id')->unique();
 
             $table->string('job_class')->index();
-            $table->string('connection')->nullable()->index();
-            $table->string('queue')->nullable()->index();
+            $table->string('queue_connection')->nullable()->index();
+            $table->string('queue_name')->nullable()->index();
 
             $table->longText('job_detail');
             $table->json('errors');
