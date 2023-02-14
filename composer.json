@@ -6,7 +6,7 @@
   "keywords": [
     "laravel library",
     "laravel safe dispatcher",
-    "laravel safe dispatch ensure your Queue Job Msgs are totally tracked & resendable"
+    "laravel safe dispatch ensure your Queue Job Msgs are totally tracked and resendable"
   ],
   "authors": [
     {
