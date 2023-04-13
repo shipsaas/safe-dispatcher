@@ -1,5 +1,7 @@
 # Laravel Safe Dispatcher for Queues
 
+[![Latest Version](http://poser.pugx.org/shipsaas/safe-dispatcher/v)](https://packagist.org/packages/shipsaas/safe-dispatcher)
+[![Total Downloads](http://poser.pugx.org/shipsaas/safe-dispatcher/downloads)](https://packagist.org/packages/shipsaas/safe-dispatcher)
 [![Build & Test](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml/badge.svg)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/shipsaas/safe-dispatcher/branch/main/graph/badge.svg?token=FLVU412CUI)](https://codecov.io/gh/shipsaas/safe-dispatcher)
 
