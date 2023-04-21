@@ -1,5 +1,8 @@
 # ChangeLog - Safe Dispatcher
 
+## v1.1.0
+- Supports Laravel 10
+
 ## v1.0.0
 
 - Initial Release
