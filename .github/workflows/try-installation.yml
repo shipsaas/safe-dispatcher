@@ -10,7 +10,7 @@ on:
             - 'main'
 
 jobs:
-    build:
+    try_installation:
         strategy:
             fail-fast: false
             matrix:
