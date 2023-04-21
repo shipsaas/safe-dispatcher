@@ -1,0 +1,67 @@
+name: Build & Test (Laravel 9, 10)
+env:
+    TESTING_ENV: ${{ secrets.TESTING_ENV }}
+
+on:
+    pull_request:
+        branches:
+            - 'main'
+        types: [ opened, synchronize, reopened, ready_for_review ]
+    push:
+        branches:
+            - 'main'
+
+jobs:
+    build_laravel:
+        strategy:
+            fail-fast: false
+            matrix:
+                version: [
+                    '9',
+                    '10'
+                ]
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+                if: success()
+
+            -   name: Setup PHP with coverage driver
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.1
+                    coverage: pcov
+
+            -   name: Start Redis
+                uses: supercharge/redis-github-action@1.4.0
+                with:
+                    redis-version: 6
+
+            -   name: Setup
+                if: success()
+                run: |
+                    sudo service mysql start
+                    php -v
+                    mysql -uroot -proot -e "CREATE DATABASE priority_queue;"
+                    composer install --no-interaction
+                    echo "$TESTING_ENV" > .env.testing
+
+            -   name: Laravel 9 composition
+                if: matrix.version == '9'
+                run: |
+                    composer require \
+                        "laravel/framework" "^9" \
+                        "orchestra/testbench" "^7" \
+                        --with-all-dependencies
+
+            -   name: Laravel 10 composition
+                if: matrix.version == '10'
+                run: |
+                    composer require \
+                        "laravel/framework" "^10" \
+                        "orchestra/testbench" "^8" \
+                        --with-all-dependencies
+
+            -   name: PHPUnit tests
+                if: success() && github.event.pull_request.draft == false
+                run: |
+                    composer test
