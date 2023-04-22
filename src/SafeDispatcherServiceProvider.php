@@ -14,7 +14,7 @@ class SafeDispatcherServiceProvider extends ServiceProvider implements Deferrabl
 {
     public function boot(): void
     {
-        AboutCommand::add('ShipSaaS/SafeDispatcher', fn () => ['Version' => '1.0.0']);
+        AboutCommand::add('ShipSaaS/SafeDispatcher', fn () => ['Version' => '1.2.0']);
 
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
         $this->mergeConfigFrom(__DIR__ . '/Configs/safe-dispatcher.php', 'safe-dispatcher');

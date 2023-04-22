@@ -4,9 +4,10 @@ use Illuminate\Queue\CallQueuedClosure;
 use SaasSafeDispatcher\Bus\SafeDispatcher;
 use SaasSafeDispatcher\Bus\SafePendingClosureDispatch;
 use SaasSafeDispatcher\Bus\SafePendingDispatch;
-use SaasSafeDispatcher\Services\FailDispatcherService;
 
+// @codeCoverageIgnoreStart
 if (!function_exists('safeDispatch')) {
+// @codeCoverageIgnoreEnd
     /**
      * Helper method - safe dispatch a job
      */
@@ -16,9 +17,13 @@ if (!function_exists('safeDispatch')) {
             ? new SafePendingClosureDispatch(CallQueuedClosure::create($job))
             : new SafePendingDispatch($job);
     }
+// @codeCoverageIgnoreStart
 }
+// @codeCoverageIgnoreEnd
 
+// @codeCoverageIgnoreStart
 if (!function_exists('safeDispatchSync')) {
+// @codeCoverageIgnoreEnd
     /**
      * Helper method - safely dispatch a job in sync connection
      */
@@ -26,4 +31,6 @@ if (!function_exists('safeDispatchSync')) {
     {
         return app(SafeDispatcher::class)->dispatchSync($job, $handler);
     }
+// @codeCoverageIgnoreStart
 }
+// @codeCoverageIgnoreEnd
