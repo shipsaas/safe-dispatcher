@@ -1,24 +1,46 @@
 # Queue Facade
 
-Queue Facade allows you to access the current/any Queue Connection directly.
+Queue Facade allows you to interact with the current/any Queue Connection directly.
 
-SafeDispatcher is only supporting `dispatch` method, which we are usually do: `Job::dispatch` or `app(Dispatcher::class)->dispatch(...)`.
+If you prefer using Queue Facade, please use our `SafeQueue` wrapper.
 
-We're going to cover this soon in v1.1 or v1.2, stay tuned!
+Available on **v1.2.0**.
 
-## Wrapper your push/pushRaw/pushOn/later/laterOn call
-
-Wrap it with a try/catch and use SafeDispatcher service to insert the fail to dispatch:
+## Usage
 
 ```php
-use SaasSafeDispatcher\Services\FailDispatcherService;
+use SaasSafeDispatcher\Services\SafeQueue;
 
-try {
-    return Queue::push(new MyJob($myData));
-} catch (Throwable $throwable) {
-    app(FailDispatcherService::class)
-        ->storeFailure($queue, $throwable, $command);
+# Use "default" queue connection
+SafeQueue::prepareFor(new Job())
+    ->push(); # Push to default queue name
+    
+SafeQueue::prepareFor(new Job())
+    ->push('high'); # Push to "high" queue name
 
-    return;
-}
+# Use "redis" queue connection
+SafeQueue::prepareFor(new Job(), 'redis')
+    ->later(\Carbon\Carbon::now()->addMinutes(10)); # Push to "default" queue name
+
+SafeQueue::prepareFor(new Job(), 'redis')
+    ->later(\Carbon\Carbon::now()->addMinutes(10), 'low'); # Push to "low" queue name
 ```
+
+## Notes
+
+### Single Push
+`SafeQueue` only supports single push. So if you have a list of queued jobs, loop them 😆
+
+```php
+collect($jobs)->each(fn ($job) => SafeQueue::prepareFor($job)->push());
+```
+
+### Strict Contract
+
+`SafeQueue` expects your job class must implement the `ShouldQueue`, please do so.
+
+Also, you can obviously add the connection, queue & delay from your job class as well 😉
+
+### Love your life
+
+Remember to use `SafeQueue` over `Queue` facade 😉

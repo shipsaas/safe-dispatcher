@@ -1,7 +1,7 @@
 {
   "name": "shipsaas/safe-dispatcher",
   "type": "library",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Ensure your Queue msg is tracked and retryable when failed to dispatch.",
   "keywords": [
     "laravel library",

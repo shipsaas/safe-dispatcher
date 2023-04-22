@@ -90,6 +90,7 @@ class RedisQueueTest extends TestCase
         QueueJob::safeDispatch('SafeDispatch');
 
         $this->assertDatabaseHas((new FailedToDispatchJob())->getTable(), [
+            'queue_connection' => null,
             'job_class' => QueueJob::class,
             'errors->msg' => 'Cannot dispatch job',
         ]);
