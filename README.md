@@ -2,8 +2,10 @@
 
 [![Latest Version](http://poser.pugx.org/shipsaas/safe-dispatcher/v)](https://packagist.org/packages/shipsaas/safe-dispatcher)
 [![Total Downloads](http://poser.pugx.org/shipsaas/safe-dispatcher/downloads)](https://packagist.org/packages/shipsaas/safe-dispatcher)
-[![Build & Test](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml/badge.svg)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/shipsaas/safe-dispatcher/branch/main/graph/badge.svg?token=FLVU412CUI)](https://codecov.io/gh/shipsaas/safe-dispatcher)
+[![Build & Test](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml/badge.svg)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build.yml)
+[![Build & Test (Laravel 9, 10)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build-laravel.yml/badge.svg)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/build-laravel.yml)
+[![Try Install Package (Laravel 9 & 10)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/try-installation.yml/badge.svg)](https://github.com/shipsaas/safe-dispatcher/actions/workflows/try-installation.yml)
 
 For Laravel, it has the Queues feature, all cool and easy to use, right?
 
@@ -18,6 +20,7 @@ Then it will cost you a lot of time to check the log, sentry issues, create retr
 Worries no more, SafeDispatcher got your back. Check out how it works below.
 
 Documentation:
+
 - This README
 - [APIs](./docs/APIs.md)
 - [GUI](./docs/GUI.md)
@@ -28,15 +31,16 @@ Documentation:
 
 SafeDispatcher will:
 
-- Stores the failed to dispatch msgs and help you to retry them.
+- Store the failed to dispatch msgs.
+- Retry them on demand.
 - You can even change the connection driver or the name on retry.
   - Would really come in handy when you have a `SQSException` (size > 256kb), then you can resend using redis/database driver.
 - Ensure that your processing/flow is still working properly (no 500 server error from HTTP or exceptions from queue worker).
-  - Super useful for critical apps.
+  - Super useful & helpful for mission-critical apps.
 
 ## Requirements
-- Laravel 9+
-- PHP 8.1+
+- Laravel 9+ & 10+
+- PHP 8.1 & 8.2
 
 ## Installation
 
@@ -88,15 +92,24 @@ safeDispatch(() => echo('Hello'));
 safeDispatchSync(new SendEmailToRegisteredUser($user));
 ```
 
+### Cover Queue Facade (v1.2.0+)
+
+```php
+use SaasSafeDispatcher\Services\SafeQueue;
+
+SafeQueue::prepareFor(new Job())
+    ->push('high'); # Push to "high" queue name
+```
+
+Learn more [Cover Queue Facade](./docs/QueueFacade.md)
+
 ## Notes
 
-- SafeDispatcher hasn't covered the `Queue` facade.
-  - Alternatively, you can follow this doc: [Cover Queue Facade](./docs/QueueFacade.md)
 - SafeDispatcher hasn't supported with batching & chaining.
   - Alternatively, you can do normal `::safeDispatch` and after finish your job, dispatch another,...
 - SafeDispatcher considers the `sync` Queue as a Queue Msg.
   - Therefore, if the handling fails, Queue Msg will be stored too.
-- SafeDispatcher also has some implemented APIs too, check it out: [APIs](./docs/APIs.md)
+- SafeDispatcher ships some helpful APIs too, check it out: [APIs](./docs/APIs.md)
 
 ## Tests
 SafeDispatcher is not only have normal Unit Testing but also Integration Test (interacting with MySQL for DB and Redis for Queue).
@@ -124,4 +137,4 @@ Thank you, please give it a ⭐️⭐️⭐️ to support the project.
 Don't forget to share with your friends & colleagues 🚀
 
 ## License
-Copyright © by Seth Phat / ShipSaaS 2023 - Under MIT License.
+Copyright © by ShipSaaS 2023 - Under MIT License.

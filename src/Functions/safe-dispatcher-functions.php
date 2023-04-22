@@ -4,6 +4,7 @@ use Illuminate\Queue\CallQueuedClosure;
 use SaasSafeDispatcher\Bus\SafeDispatcher;
 use SaasSafeDispatcher\Bus\SafePendingClosureDispatch;
 use SaasSafeDispatcher\Bus\SafePendingDispatch;
+use SaasSafeDispatcher\Services\FailDispatcherService;
 
 if (!function_exists('safeDispatch')) {
     /**

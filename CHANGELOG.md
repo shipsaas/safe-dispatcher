@@ -1,5 +1,8 @@
 # ChangeLog - Safe Dispatcher
 
+## v1.2.0
+- `SafeQueue` to cover `Queue` facade.
+
 ## v1.1.0
 - Supports Laravel 10
 
